@@ -22,9 +22,6 @@ variables:
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-  # Python version: 3.7
-  pythonVersion: '3.7'
-
 stages:
 - stage: Build
   displayName: Build stage
@@ -33,15 +30,13 @@ stages:
     pool:
       name: Default
     steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '$(pythonVersion)'
-      displayName: 'Use Python $(pythonVersion)'
+    - script: python3 --version
+      displayName: 'Use Python 3.10.12'
 
     - script: |
-        python -m venv antenv
+        python3 -m venv antenv
         source antenv/bin/activate
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install setup
         pip install -r requirements.txt
       workingDirectory: $(projectRoot)
@@ -74,9 +69,7 @@ stages:
         deploy:
           steps:
 
-          - task: UsePythonVersion@0
-            inputs:
-              versionSpec: '$(pythonVersion)'
+          - script: python3 --version
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
